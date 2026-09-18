@@ -26,17 +26,45 @@ textarea{width:100%;border:0;border-top:1px solid #e2e2e2;resize:vertical;min-he
 @media(max-width:900px){body{background:white}.toolbar{position:static}.sheet{width:100%;min-height:auto;margin:0;padding:18px;box-shadow:none}.meta,.grid2,.grid3{grid-template-columns:1fr}.page-label{display:none}.next-grid{grid-template-columns:1fr 1fr}}
 @page{size:letter portrait;margin:.32in}
 @media print{
- html,body{background:#fff!important;width:auto;height:auto}
+ html,body{background:#fff!important;width:auto!important;height:auto!important}
  .toolbar{display:none!important}
- .sheet{width:auto!important;min-height:0!important;height:auto!important;margin:0!important;padding:0!important;box-shadow:none!important;overflow:visible;break-inside:avoid;page-break-inside:avoid}
- .sheet:first-of-type{break-after:page;page-break-after:always}
- .sheet:last-child{break-after:auto;page-break-after:auto}
- .meta{grid-template-columns:2fr 1.2fr 1.2fr .75fr}
- .grid2{grid-template-columns:1fr 1fr}
- .grid3{grid-template-columns:repeat(3,1fr)}
- .page-label{display:block}
- .next-grid{grid-template-columns:repeat(4,1fr)}
- textarea{resize:none}
+ .sheet{
+   width:7.86in!important;
+   height:10.36in!important;
+   min-height:10.36in!important;
+   margin:0!important;
+   padding:.12in .10in!important;
+   box-shadow:none!important;
+   overflow:hidden!important;
+   break-inside:avoid!important;
+   page-break-inside:avoid!important;
+ }
+ .sheet:first-of-type{break-after:page!important;page-break-after:always!important}
+ .sheet:last-child{break-after:auto!important;page-break-after:auto!important}
+ .header{padding-bottom:5px;margin-bottom:6px;gap:8px}
+ h1{font-size:18px}
+ .acronym{font-size:8px;padding:1px 5px;vertical-align:2px}
+ .subtitle{font-size:9px;margin-top:2px}
+ .page-label{display:block;font-size:7.5px}
+ .meta{grid-template-columns:2fr 1.2fr 1.2fr .75fr;gap:5px;margin-bottom:6px}
+ .field{font-size:7.5px}
+ .line{height:15px}
+ .section{margin-top:6px}
+ .section-title{font-size:9.5px;margin-bottom:3px;gap:4px}
+ .num{width:15px;height:15px;font-size:7.5px}
+ .grid2{grid-template-columns:1fr 1fr;gap:5px}
+ .grid3{grid-template-columns:repeat(3,1fr);gap:5px}
+ .card{padding:4px;border-radius:4px}
+ .card h3{font-size:8.2px;margin-bottom:1px}
+ .prompt{font-size:7.2px;line-height:1.18;margin-bottom:2px}
+ textarea{resize:none;min-height:30px;font-size:8.5px}
+ .tall textarea{min-height:38px}
+ .small textarea{min-height:24px}
+ .wide textarea{min-height:42px}
+ .checks{gap:2px 7px;font-size:7px}
+ .next-grid{grid-template-columns:repeat(4,1fr);gap:3px 5px;font-size:7px}
+ .notes{height:.92in;background:repeating-linear-gradient(to bottom,#fff 0,#fff 15px,#ddd 16px)}
+ .footer{margin-top:5px;padding-top:3px;font-size:6.8px}
 }
 </style>
 </head>
