@@ -26,20 +26,21 @@ textarea{width:100%;border:0;border-top:1px solid #e2e2e2;resize:vertical;min-he
 @media(max-width:900px){body{background:white}.toolbar{position:static}.sheet{width:100%;min-height:auto;margin:0;padding:18px;box-shadow:none}.meta,.grid2,.grid3{grid-template-columns:1fr}.page-label{display:none}.next-grid{grid-template-columns:1fr 1fr}}
 @page{size:letter portrait;margin:.32in}
 @media print{
- html,body{background:#fff!important;width:auto!important;height:auto!important}
+ html,body{margin:0!important;padding:0!important;background:#fff!important;width:100%!important;height:auto!important}
  .toolbar{display:none!important}
  .sheet{
-   width:7.86in!important;
-   height:10.36in!important;
-   min-height:10.36in!important;
+   width:auto!important;
+   height:auto!important;
+   min-height:0!important;
    margin:0!important;
    padding:.10in .10in!important;
    box-shadow:none!important;
-   overflow:hidden!important;
+   overflow:visible!important;
    break-inside:auto!important;
    page-break-inside:auto!important;
  }
- .sheet + .sheet{break-before:page!important;page-break-before:always!important}
+ .page1{break-after:page!important;page-break-after:always!important}
+ .page2{break-after:auto!important;page-break-after:auto!important}
  .header{padding-bottom:5px;margin-bottom:6px;gap:8px}
  h1{font-size:19px}
  .acronym{font-size:8.5px;padding:1px 5px;vertical-align:2px}
@@ -48,27 +49,27 @@ textarea{width:100%;border:0;border-top:1px solid #e2e2e2;resize:vertical;min-he
  .meta{grid-template-columns:2fr 1.2fr 1.2fr .75fr;gap:5px;margin-bottom:6px}
  .field{font-size:7.6px}
  .line{height:15px}
- .section{margin-top:6px}
+ .section{margin-top:5.5px;break-inside:avoid;page-break-inside:avoid}
  .section-title{font-size:9.6px;margin-bottom:3px;gap:4px}
  .num{width:15px;height:15px;font-size:7.5px}
- .grid2{grid-template-columns:1fr 1fr;gap:5px}
- .grid3{grid-template-columns:repeat(3,1fr);gap:5px}
+ .grid2{grid-template-columns:1fr 1fr;gap:4.5px}
+ .grid3{grid-template-columns:repeat(3,1fr);gap:4.5px}
  .card{padding:4.5px;border-radius:4px}
  .card h3{font-size:8.5px;margin-bottom:1.5px}
  .prompt{font-size:7.3px;line-height:1.18;margin-bottom:2.5px}
  textarea{resize:none;min-height:34px;font-size:8.7px}
- .tall textarea{min-height:43px}
- .small textarea{min-height:27px}
- .wide textarea{min-height:49px}
- .page1 .tall textarea{min-height:40px}
- .page1 textarea{min-height:34px}
- .page1 .small textarea{min-height:26px}
+ .tall textarea{min-height:42px}
+ .small textarea{min-height:26px}
+ .wide textarea{min-height:48px}
+ .page1 .tall textarea{min-height:39px}
+ .page1 textarea{min-height:33px}
+ .page1 .small textarea{min-height:25px}
  .checks{gap:2px 6px;font-size:7.2px}
  .checks input{width:11px;height:11px;margin:1px 2px 1px 0}
  .next-grid{grid-template-columns:repeat(4,1fr);gap:2.5px 4.5px;font-size:7.1px}
  .next-grid input{width:11px;height:11px;margin:1px 2px 1px 0}
- .notes{height:1.48in;background:repeating-linear-gradient(to bottom,#fff 0,#fff 17px,#ddd 18px)}
- .footer{margin-top:5px;padding-top:3px;font-size:6.8px}
+ .notes{height:1.42in;background:repeating-linear-gradient(to bottom,#fff 0,#fff 17px,#ddd 18px)}
+ .footer{margin-top:4px;padding-top:3px;font-size:6.8px}
 }
 </style>
 </head>
