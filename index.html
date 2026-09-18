@@ -73,9 +73,10 @@ textarea{width:100%;border:0;border-top:1px solid #e2e2e2;resize:vertical;min-he
  .footer{margin-top:4px;padding-top:3px;font-size:6.8px}
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
 </head>
 <body>
-<div class="toolbar"><button class="primary" onclick="window.print()">Print / Save PDF</button><button onclick="document.querySelectorAll('textarea').forEach(x=>x.value='')">Clear text</button></div>
+<div class="toolbar"><button class="primary" onclick="downloadSISTPDF()">Download 2-Page PDF</button><button onclick="window.print()">Browser Print</button><button onclick="document.querySelectorAll('textarea').forEach(x=>x.value='')">Clear text</button></div>
 <section class="sheet page1">
 <div class="header"><div class="header-main"><h1>Structured Idea Stress Test <span class="acronym">SIST</span></h1><div class="subtitle">Understand the idea, place it in context, identify who it serves, and define where it fits.</div></div><div class="page-label">Page 1 · Understand + Bound</div></div>
 <div class="meta"><div class="field">Idea / Concept<span class="line"></span></div><div class="field">Presenter / Creator<span class="line"></span></div><div class="field">Evaluator (optional)<span class="line"></span></div><div class="field">Date<span class="line"></span></div></div>
@@ -98,5 +99,118 @@ textarea{width:100%;border:0;border-top:1px solid #e2e2e2;resize:vertical;min-he
 <div class="section"><h2 class="section-title"><span class="num">12</span> Questions, Suggestions + Notes</h2><div class="grid2"><div class="card small"><h3>Questions I still have</h3><textarea></textarea></div><div class="card small"><h3>Suggestions worth considering</h3><textarea></textarea></div></div><div class="notes" style="margin-top:6px"></div></div>
 <div class="footer"><span>SIST · Structured Idea Stress Test</span><span>Reveal what should change, what should stay, and what deserves attention next.</span></div>
 </section>
+<script>
+function downloadSISTPDF(){
+  if(!window.jspdf){alert('PDF generator is still loading. Try again in a moment.');return;}
+  const {jsPDF}=window.jspdf;
+  const pdf=new jsPDF({orientation:'portrait',unit:'pt',format:'letter'});
+  const W=612,H=792,M=28,accent=[46,91,77],ink=[23,23,23],muted=[95,95,95],line=[205,205,205];
+  const pages=[document.querySelector('.page1'),document.querySelector('.page2')];
+
+  function wrap(text,width,size,style='normal'){
+    pdf.setFont('helvetica',style); pdf.setFontSize(size);
+    return pdf.splitTextToSize((text||'').trim(),width);
+  }
+  function textBlock(text,x,y,width,size=7.4,style='normal',leading=1.18,color=ink){
+    pdf.setTextColor(...color); pdf.setFont('helvetica',style); pdf.setFontSize(size);
+    const lines=wrap(text,width,size,style); pdf.text(lines,x,y,{lineHeightFactor:leading});
+    return lines.length*size*leading;
+  }
+  function box(x,y,w,h){
+    pdf.setDrawColor(...line); pdf.setLineWidth(.6); pdf.roundedRect(x,y,w,h,3,3);
+  }
+  function responseLines(x,y,w,h,value){
+    pdf.setDrawColor(225,225,225); pdf.setLineWidth(.45);
+    const gap=12; for(let yy=y+gap;yy<y+h-2;yy+=gap) pdf.line(x,yy,x+w,yy);
+    if(value&&value.trim()) textBlock(value,x+3,y+10,w-6,7.5,'normal',1.16,ink);
+  }
+  function sectionTitle(n,title,y){
+    pdf.setFillColor(...accent); pdf.circle(M+7,y-3,7,'F');
+    pdf.setTextColor(255,255,255); pdf.setFont('helvetica','bold'); pdf.setFontSize(7); pdf.text(String(n),M+7,y-.5,{align:'center'});
+    pdf.setTextColor(...ink); pdf.setFontSize(9.2); pdf.text(title.toUpperCase(),M+20,y);
+  }
+  function checkboxRow(labels,x,y,maxW){
+    pdf.setFont('helvetica','normal');pdf.setFontSize(6.7);pdf.setTextColor(...ink);
+    let xx=x, yy=y;
+    labels.forEach(label=>{
+      const tw=pdf.getTextWidth(label)+15;
+      if(xx+tw>x+maxW){xx=x;yy+=10;}
+      pdf.rect(xx,yy-6,6,6); pdf.text(label,xx+9,yy); xx+=tw+7;
+    });
+    return yy;
+  }
+  function val(card){const t=card.querySelector('textarea');return t?t.value:'';}
+  function drawCard(card,x,y,w,h){
+    box(x,y,w,h);
+    const h3=card.querySelector('h3')?.innerText||'';
+    textBlock(h3.toUpperCase(),x+5,y+10,w-10,7.6,'bold',1.1,ink);
+    const p=card.querySelector('.prompt')?.innerText||'';
+    let py=y+20;
+    if(p){const ph=textBlock(p,x+5,py,w-10,6.6,'normal',1.12,muted);py+=ph+3;}
+    const checks=[...card.querySelectorAll('.checks label')].map(l=>l.innerText.trim());
+    if(checks.length){py=checkboxRow(checks,x+5,py+4,w-10)+6;}
+    responseLines(x+5,py,w-10,Math.max(12,y+h-py-5),val(card));
+  }
+  function header(pageNum,label,subtitle,meta){
+    pdf.setTextColor(...ink);pdf.setFont('helvetica','bold');pdf.setFontSize(18);pdf.text('Structured Idea Stress Test',M,35);
+    pdf.setDrawColor(...ink);pdf.roundedRect(262,22,30,14,7,7);pdf.setFontSize(7.5);pdf.text('SIST',277,31.5,{align:'center'});
+    pdf.setFont('helvetica','normal');pdf.setFontSize(8.7);pdf.setTextColor(...muted);pdf.text(subtitle,M,48);
+    pdf.setFont('helvetica','bold');pdf.setFontSize(7);pdf.text(label,584,34,{align:'right'});
+    pdf.setDrawColor(...accent);pdf.setLineWidth(1.5);pdf.line(M,55,584,55);
+    if(meta){
+      const labels=['IDEA / CONCEPT','PRESENTER / CREATOR','EVALUATOR (OPTIONAL)','DATE'], widths=[230,130,130,66];
+      let x=M; labels.forEach((lab,i)=>{pdf.setFontSize(6.7);pdf.setTextColor(...muted);pdf.text(lab,x,68);pdf.setDrawColor(110);pdf.line(x,82,x+widths[i]-6,82);x+=widths[i];});
+      return 92;
+    }
+    return 70;
+  }
+  function footer(text){
+    pdf.setDrawColor(...line);pdf.line(M,766,584,766);pdf.setFontSize(6.3);pdf.setTextColor(...muted);pdf.text('SIST · Structured Idea Stress Test',M,776);pdf.text(text,584,776,{align:'right'});
+  }
+
+  // PAGE 1
+  let y=header(1,'PAGE 1 · UNDERSTAND + BOUND','Understand the idea, place it in context, identify who it serves, and define where it fits.',true);
+  const p1=pages[0], secs=[...p1.querySelectorAll('.section')];
+  const layouts=[
+    {h:91,cols:2},{h:91,cols:2},{h:88,cols:3},{h:122,cols:2,rows:2},{h:91,cols:2},{h:86,cols:1}
+  ];
+  secs.forEach((s,i)=>{
+    sectionTitle(i+1,s.querySelector('.section-title').innerText.replace(/^\d+\s*/,''),y+8); y+=15;
+    const cards=[...s.querySelectorAll('.card')], L=layouts[i], gap=5;
+    if(i===3){
+      const w=(556-gap)/2,h=(L.h-gap)/2;
+      cards.forEach((card,j)=>drawCard(card,M+(j%2)*(w+gap),y+Math.floor(j/2)*(h+gap),w,h));
+    }else{
+      const w=(556-gap*(L.cols-1))/L.cols;
+      cards.forEach((card,j)=>drawCard(card,M+j*(w+gap),y,w,L.h));
+    }
+    y+=L.h+7;
+  });
+  footer('Understand the idea well enough to identify its fit, friction, and boundaries.');
+
+  // PAGE 2
+  pdf.addPage();
+  y=header(2,'PAGE 2 · STRESS TEST + IMPROVE','Test what could fail, what must be true, what needs evidence, what should change, and what should remain.',false);
+  const p2=pages[1], s2=[...p2.querySelectorAll('.section')];
+  const hs=[102,83,83,113,82,151];
+  s2.forEach((s,idx)=>{
+    const n=idx+7; sectionTitle(n,s.querySelector('.section-title').innerText.replace(/^\d+\s*/,''),y+8); y+=15;
+    const cards=[...s.querySelectorAll('.card')], gap=5, totalH=hs[idx];
+    if(idx===0){
+      const w=(556-gap)/2;cards.forEach((card,j)=>drawCard(card,M+j*(w+gap),y,w,totalH));
+    }else if(idx===3){
+      const w=(556-gap)/2;drawCard(cards[0],M,y,w,totalH);
+      box(M+w+gap,y,w,totalH);textBlock('WHAT SHOULD HAPPEN NEXT?',M+w+gap+5,y+10,w-10,7.6,'bold');
+      const labs=[...cards[1].querySelectorAll('.next-grid label')].map(l=>l.innerText.trim());checkboxRow(labs,M+w+gap+5,y+25,w-10);
+    }else if(idx===5){
+      const w=(556-gap)/2; drawCard(cards[0],M,y,w,55); drawCard(cards[1],M+w+gap,y,w,55);
+      box(M,y+61,556,totalH-61); responseLines(M+5,y+66,546,totalH-71,'');
+    }else drawCard(cards[0],M,y,556,totalH);
+    y+=totalH+7;
+  });
+  footer('Reveal what should change, what should stay, and what deserves attention next.');
+  pdf.save('SIST-Structured-Idea-Stress-Test.pdf');
+}
+</script>
 </body>
 </html>
