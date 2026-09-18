@@ -39,8 +39,9 @@ textarea{width:100%;border:0;border-top:1px solid #e2e2e2;resize:vertical;min-he
    break-inside:auto!important;
    page-break-inside:auto!important;
  }
- .page1{break-after:page!important;page-break-after:always!important}
+ .page1{break-after:auto!important;page-break-after:auto!important}
  .page2{break-after:auto!important;page-break-after:auto!important}
+ .print-break{display:block!important;height:0!important;margin:0!important;padding:0!important;border:0!important;break-before:page!important;page-break-before:always!important}
  .header{padding-bottom:5px;margin-bottom:6px;gap:8px}
  h1{font-size:19px}
  .acronym{font-size:8.5px;padding:1px 5px;vertical-align:2px}
@@ -86,6 +87,7 @@ textarea{width:100%;border:0;border-top:1px solid #e2e2e2;resize:vertical;min-he
 <div class="section"><h2 class="section-title"><span class="num">6</span> Scope, boundaries + limitations</h2><div class="card tall"><h3>Where does this fit, and where does it stop fitting?</h3><p class="prompt">What is it good for or not good for? What boundaries or limitations do you already see or suspect? Consider users, geography, scale, cost, technology, regulation, time, context, expertise, or dependencies.</p><textarea></textarea></div></div>
 <div class="footer"><span>SIST · Structured Idea Stress Test</span><span>Understand the idea well enough to identify its fit, friction, and boundaries.</span></div>
 </section>
+<div class="print-break" aria-hidden="true"></div>
 <section class="sheet page2">
 <div class="header"><div class="header-main"><h1>Structured Idea Stress Test <span class="acronym">SIST</span></h1><div class="subtitle">Test what could fail, what must be true, what needs evidence, what should change, and what should remain.</div></div><div class="page-label">Page 2 · Stress Test + Improve</div></div>
 <div class="section"><h2 class="section-title"><span class="num">7</span> Failure points + assumptions</h2><div class="grid2"><div class="card tall"><h3>How could this fail?</h3><p class="prompt">Consider technical, behavioral, financial, operational, social, institutional, legal, or other failure modes.</p><textarea></textarea></div><div class="card tall"><h3>What needs to be true?</h3><p class="prompt">What assumptions, missing pieces, stakeholders, resources, or conditions does the idea depend on?</p><textarea></textarea></div></div></div>
